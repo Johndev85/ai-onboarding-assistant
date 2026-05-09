@@ -1,11 +1,7 @@
-import React from "react"
 import type { Metadata } from 'next'
 import { Instrument_Sans, Instrument_Serif, JetBrains_Mono } from 'next/font/google'
-import { ThreadsProvider } from "@copilotkit/react-core"
-import { CopilotKit } from "@copilotkit/react-core"
-import { CopilotSidebar } from "@copilotkit/react-ui"
-import '@copilotkit/react-ui/styles.css'
-import './globals.css'
+import { UserProfileProvider } from "@/hooks/useUserProfile"
+import { ClientLayout } from "./client-layout"
 
 const instrumentSans = Instrument_Sans({ 
   subsets: ["latin"],
@@ -24,8 +20,8 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Optimus - Platform to Create',
-  description: 'The creative platform for teams who ship. Build, deploy, and scale with unprecedented velocity.',
+  title: 'Flowly - Adaptive Marketing Intelligence',
+  description: 'Centralize marketing data, generate insights, and automate better decisions.',
 }
 
 export default function RootLayout({
@@ -36,12 +32,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${instrumentSans.variable} ${instrumentSerif.variable} ${jetbrainsMono.variable} font-sans antialiased`}>
-        <ThreadsProvider>
-          <CopilotKit runtimeUrl="/api/copilotkit">
+        <UserProfileProvider>
+          <ClientLayout>
             {children}
-            <CopilotSidebar />
-          </CopilotKit>
-        </ThreadsProvider>
+          </ClientLayout>
+        </UserProfileProvider>
       </body>
     </html>
   )
