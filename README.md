@@ -1,36 +1,85 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Flowly AI Onboarding Assistant
 
-## Getting Started
+Adaptive landing page system with AI-powered onboarding via CopilotKit chat.
 
-First, run the development server:
+## Overview
+
+Users complete an onboarding questionnaire via CopilotKit chat, and the landing page dynamically personalizes based on their role, goals, and setup.
+
+## Preview
+
+### Onboarding (CopilotKit panel)
+
+![Welcome screen with Flowly onboarding questionnaire in the right panel](docs/preview/onboarding.png)
+
+### Personalized landing
+
+![Hero section with role-based headline and CTA](docs/preview/personalized-landing.png)
+
+### Architecture map
+
+![Integrations list and feature cards for unified marketing data](docs/preview/architecture-map.png)
+
+## Tech Stack
+
+- **Next.js 16** with App Router
+- **CopilotKit** - AI chat integration with sidebar
+- **Google Gemini** - AI model (gemini-1.5-flash-8k)
+- **TypeScript** - Type safety
+- **Tailwind CSS** - Styling
+
+## Project Structure
+
+```
+├── app/
+│   ├── api/copilotkit/route.ts     # CopilotKit API endpoint
+│   ├── client-layout.tsx           # Client components (CopilotKit providers)
+│   ├── layout.tsx                  # Server layout with metadata
+│   └── page.tsx                    # Main page with adaptive landing
+├── components/
+│   ├── chat/
+│   │   └── OnboardingPanel.tsx     # Onboarding form (right side panel)
+│   └── landing/                    # 16 landing components from optimus
+├── hooks/
+│   ├── useOnboardingChat.ts         # Onboarding state management
+│   └── useUserProfile.ts           # User profile context (role, goal, setup)
+└── lib/
+    ├── dynamic-variables.ts        # {{variable}} interpolation system
+    └── persona-mapping.ts          # UserProfile types & persona mapping
+```
+
+## Key Features
+
+1. **Onboarding Flow**: 3-question questionnaire (role → goal → setup)
+2. **Dynamic Landing**: Persona-specific content based on user answers
+3. **Copilot Sidebar**: Opens by default, guides user through questions
+4. **Onboarding Panel**: Floating panel on right side for form input
+5. **Agent Guidance**: AI agent prompts user through each question
+
+## Configuration
+
+Set your Google API key in `.env`:
+
+```
+GOOGLE_API_KEY=your_api_key_here
+```
+
+## Running
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000 - landing shows blurred until onboarding complete.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Recent Changes
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Moved OnboardingPanel from right of sidebar to full right side of screen
+- Removed OnboardingA2UI component (useCopilotAction render prop caused build errors)
+- Simplified client-layout.tsx to use OnboardingPanel instead
+- Switched from gemini-2.5-flash to gemini-1.5-flash-8k for quota management
 
-## Learn More
+## Known Issues
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- CopilotKit `useCopilotAction` with `render` prop causes "Invalid action configuration" - using panel UI instead
+- Gemini free tier has 20 requests/month limit
